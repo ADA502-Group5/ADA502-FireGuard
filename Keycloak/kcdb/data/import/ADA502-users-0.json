@@ -1,0 +1,56 @@
+{
+  "realm" : "ADA502",
+  "users" : [ {
+    "id" : "4c582cc9-ef81-43e9-8226-146f82cabfc5",
+    "username" : "user1",
+    "firstName" : "User1",
+    "lastName" : "User1_Username",
+    "email" : "user1@email.com",
+    "emailVerified" : false,
+    "createdTimestamp" : 1738677243636,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "dbf17d62-a664-4e79-937d-0657f7067974",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1738746441374,
+      "secretData" : "{\"value\":\"9thlQ5oxJy13gUR36flLITxEfCaXUcGbVFeGNp+yMnI=\",\"salt\":\"k9zNkcUXz5zSAJKSxQG8uw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "ADMIN" ],
+    "clientRoles" : {
+      "ada502app" : [ "APP_ADMIN", "APP_USER" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/LOC_PATH_BERGEN" ]
+  }, {
+    "id" : "d5e62307-a393-4db0-b5f3-21f6c3303a0a",
+    "username" : "user2",
+    "firstName" : "User2",
+    "lastName" : "User2_Username",
+    "email" : "user2@email.com",
+    "emailVerified" : false,
+    "createdTimestamp" : 1738677275319,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "acb7ed3d-f00c-41fb-9679-5d73c154358f",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1738746456431,
+      "secretData" : "{\"value\":\"vlo57YN90oymQLqmXnR+mIeZtVqQze/RC6waWvBASS0=\",\"salt\":\"Pp5CTMZIc1uuV78OFEIBiw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "USER" ],
+    "clientRoles" : {
+      "ada502app" : [ "APP_USER" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/LOC_QUERY_BERGEN" ]
+  } ]
+}
