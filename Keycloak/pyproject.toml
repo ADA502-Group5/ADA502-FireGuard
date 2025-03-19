@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "fastapi-jwt-keycloak"
+version = "0.1.0"
+description = ""
+authors = ["Tosin D. Oyetoyan <tosin.oyetoyan@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "api", from = "src"},
+    {include = "kc", from = "src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = "^8.0.0"
+python-keycloak = "^3.9.0"
+pydantic = "^2.6.1"
+fastapi = {extras = ["all"], version = "^0.109.2"}
+python-decouple = "^3.8"
+
+# [tool.poetry.group.test.dependencies]
+# optional = true
+requests = "^2.31.0"
+python-dotenv = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
