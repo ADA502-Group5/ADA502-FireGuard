@@ -45,6 +45,21 @@ class PgRegistrationRepository(AbstractRegistrationRepository):
             result.append(Registration(id=row[0], contact_details=row[1], location_name=row[2]))
         cursor.close()
         return result
+    
+    def getTTFForGivenDateAndLocation(self, date, location) ->list[float]:
+        cursor = self.connection.cursor()
+        cursor.execute("Select * from weatherdata where date = date and location = location")
+        result = []
+        for row in cursor.fetchall():
+            result.append(row[0])
+        cursor.close()
+        return result
+    
+    def saveTTFForGivenDataAndLocation(self,date,location):
+        query = "INSERT INTO users (name, age) VALUES (%s, %s) RETURNING id;"
+        cursor.execute(query, (name, age))
+        user_id = cursor.fetchone()[0]  # Get the inserted record ID
+        conn.commit()  # Save changes
 
     #TODO, make the other CRUD operations
 
