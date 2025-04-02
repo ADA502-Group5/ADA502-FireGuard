@@ -1,28 +1,25 @@
-from locationreg.domain import Location, Registration
+from DataHelper import Location, Registration
 from fastapi import FastAPI, Response
 from uvicorn import run
 
-from locationreg.persistence import MinioRegistrationRepository, RegistrationRepository
+from persistence import PgRegistrationRepository
 
 
 app = FastAPI()
 
 
-location_map = {
-    "bergen": Location(
-        location_name="bergen", latitude=60.3911838, longitude=5.3255599
-    ),
-    "trondheim": Location(
-        location_name="trondheim", latitude=63.4304427, longitude=10.3952956
-    ),
-    "oslo": Location(location_name="oslo", latitude=59.9112197, longitude=10.7330275),
-}
+# location_map = {
+#     "bergen": Location(
+#         location_name="bergen", latitude=60.3911838, longitude=5.3255599
+#     ),
+#     "trondheim": Location(
+#         location_name="trondheim", latitude=63.4304427, longitude=10.3952956
+#     ),
+#     "oslo": Location(location_name="oslo", latitude=59.9112197, longitude=10.7330275),
+# }
 
-# p = RegistrationRepository()
-p = MinioRegistrationRepository()
+p = PgRegistrationRepository()
 
-
-# 'hello word' to see if everyting is running
 @app.get("/checkhealth")
 def read_root():
     return "alive"
@@ -30,6 +27,7 @@ def read_root():
 
 @app.get("/locations/{location}/registrations")
 def show_registrations(location: str):
+    #TODO Get from DB
     if location in location_map:
         loc = location_map[location]
         loc.registrations = [
@@ -42,6 +40,7 @@ def show_registrations(location: str):
 
 @app.post("/locations/{location}/registrations")
 def make_registrations(location: str, registration: Registration):
+    #TODO to db
     if location in location_map:
         loc = location_map[location]
         reg = p.create_registration(registration.contact_details, location)
@@ -53,6 +52,7 @@ def make_registrations(location: str, registration: Registration):
 
 @app.delete("/locations/{location}/registrations/{registration}")
 def delete_registration(location: str, registration: int):
+    #Todo to db
     if location in location_map:
         loc = location_map[location]
         for r in p.read_registrations():
