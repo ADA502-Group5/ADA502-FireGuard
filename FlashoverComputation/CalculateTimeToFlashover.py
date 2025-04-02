@@ -5,7 +5,7 @@ from frcm.datamodel.model import Location
 
 #Please make own .env file to store following:
 #MET_CLIENT_ID = '<INSERT CLIENT ID HERE>'
-#MET_CLIENT_SECRET = '<INSERT CLIENT SECRET HERE>'.
+#MET_CLIENT_SECRET = '<INSERT CLIENT SECRET HERE>'
 
 # sample code illustrating how to use the Fire Risk Computation API (FRCAPI)
 if __name__ == "__main__":
