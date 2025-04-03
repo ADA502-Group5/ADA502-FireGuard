@@ -4,3 +4,5 @@ CREATE TABLE public.registrations (
 	location_name varchar(1000) NOT NULL,
 	CONSTRAINT registrations_pk PRIMARY KEY (id)
 );
+
+
