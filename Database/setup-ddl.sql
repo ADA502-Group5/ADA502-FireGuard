@@ -22,3 +22,5 @@ CREATE TABLE weatherdata (
 	timestamp timestamp NOT NULL,
 	CONSTRAINT weatherdata_location_fk FOREIGN KEY (location_name) REFERENCES locations(name)
 );
+
+
