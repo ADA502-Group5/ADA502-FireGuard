@@ -1,7 +1,7 @@
 -- Table: Locations
 CREATE TABLE locations (
 	name varchar(255) PRIMARY KEY,
-	latiude numeric(9,6) NOT NULL,
+	latitude numeric(9,6) NOT NULL,
 	longitude numeric(9,6) NOT NULL
 );
 -- Table: Subscribers
