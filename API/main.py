@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, Response
 from uvicorn import run
 import datetime as dt
@@ -21,13 +20,8 @@ def read_root():
 @app.get("/TTF/{locationName}/{date}")
 def calculateTTF(locationName: str, date: str):
 
-    try:
-        if locationName.lower() == "bergen":
-            ttfLocation = Location(latitude=60.383, longitude=5.3327)
-        if locationName.lower() == "haugesund":
-            ttfLocation = Location(latitude=59.4225, longitude=5.2480)
-        if ttfLocation ==[]:      
-            ttfLocation = db.getLocation(locationName)
+    try:              
+        ttfLocation = db.getLocation(locationName)
       
         if ttfLocation == []:
             return Response(content=f"Nothing found. Please try another location or check if spelled correct.", status_code=404)
@@ -37,15 +31,15 @@ def calculateTTF(locationName: str, date: str):
         #check if we have stored in our database before fetching from 3rd party
         TTF = db.getTTFForGivenDateAndLocation(date,locationName)
         
-        if TTF != None:
-            stringResponse = str(TTF.count)
+        if TTF != []:
+            stringResponse = str(TTF)
             print(stringResponse)
-            return Response(content="ok", status_code=200)
+            return Response(content=stringResponse, status_code=200)
  
         TTF = calculateTTF(ttfLocation,date)
-
+        print(TTF)
         #save the TTF in our own database to prevent spaming 3rd party.
-        db.saveTTFForGivenDataAndLocation(date,ttfLocation, TTF)
+        db.saveTTFForGivenDataAndLocation(date,locationName, TTF)
         
         stringResponse = str(TTF)
         return Response(content=stringResponse, status_code=200)
@@ -54,14 +48,6 @@ def calculateTTF(locationName: str, date: str):
 
 @app.get("/locations/{location}")
 def get_location(location: str):
-
-    if location.lower() == "bergen":
-       locationDto = Location(latitude= 60.383, longitude=5.3327)
-       return Response(content=f"Location data: Location name: {location}, Latitude:{locationDto.latitude}, Longitude: {locationDto.longitude} ", status_code=200)
-       
-    if location.lower() == "haugesund":
-        locationDto = Location(latitude=60.383, longitude=5.3327)
-        return Response(content=f"{locationDto}", status_code=200)
 
     locationFromDb = db.getLocation(location)
     print(locationFromDb)
