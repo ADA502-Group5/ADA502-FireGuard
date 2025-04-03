@@ -45,14 +45,13 @@ class PgRegistrationRepository():
 
     #TODO get weather data and save/update it to TTF if existing else create?
 
-    def getTTFForGivenDateAndLocation(self, date, locationName) ->list[float]:
+    def getTTFForGivenDateAndLocation(self, date, locationName) ->float:
             cursor = self.connection.cursor()
             query = "SELECT * FROM public.weatherdata WHERE timestamp = %s AND location_name = %s"
         
             cursor.execute(query, (date, locationName))
-            result = []
-            for row in cursor.fetchall():
-                result.append(row[0])
+            
+            result = cursor.fetchall() 
             cursor.close()
             return result
       
@@ -66,7 +65,7 @@ class PgRegistrationRepository():
             INSERT INTO public.weatherdata(location_name, time_to_flashover, timestamp)
             VALUES (%s, %s, %s) RETURNING id;
             """
-            
+            print(location)
             # Execute query and get the returned id
             cursor.execute(query, (location, ttf, date))
             
