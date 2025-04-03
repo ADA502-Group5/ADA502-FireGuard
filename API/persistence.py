@@ -20,7 +20,7 @@ class PgRegistrationRepository():
         super().__init__()
 
     def getLocation(self, name)-> Location:
-        try:
+       
             cursor = self.connection.cursor()
             query = "SELECT * FROM public.locations WHERE name = %s;"
         
@@ -30,12 +30,7 @@ class PgRegistrationRepository():
             
             cursor.close()
             return result
-        except:
-          self.connection.rollback()
-
-        finally:
-            if cursor:
-                cursor.close()
+ 
 
     def createLocation(self, locationName, latitude, longitude):
       
@@ -53,26 +48,20 @@ class PgRegistrationRepository():
 
     #TODO get weather data and save/update it to TTF if existing else create?
 
-    def getTTFForGivenDateAndLocation(self, date, location) ->list[float]:
-        #TODO Test this
-        try:
+    def getTTFForGivenDateAndLocation(self, date, locationName) ->list[float]:
             cursor = self.connection.cursor()
-            query = "SELECT * FROM public.weatherdata WHERE date = %s AND location = %s"
+            query = "SELECT * FROM public.weatherdata WHERE timestamp = %s AND location_name = %s"
         
-            cursor.execute(query, (date, location))
+            cursor.execute(query, (date, locationName))
             result = []
             for row in cursor.fetchall():
                 result.append(row[0])
             cursor.close()
             return result
-        except:
-           self.connection.rollback()
-        finally:
-            if cursor:
-                cursor.close()
+      
     
     def saveTTFForGivenDataAndLocation(self, date, location, ttf):
-        try:
+      
             cursor = self.connection.cursor()
             
             # Modified query to RETURNING the id of the inserted row
@@ -92,9 +81,4 @@ class PgRegistrationRepository():
             
             return inserted_id
 
-        except Exception as e:
-            self.connection.rollback()
 
-        finally:
-            if cursor:
-                cursor.close()

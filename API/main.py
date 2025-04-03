@@ -35,14 +35,15 @@ def calculateTTF(locationName: str, date: str):
         date = datetime.strptime(date, "%Y-%m-%d")
         
         #check if we have stored in our database before fetching from 3rd party
-        TTF = db.getTTFForGivenDateAndLocation(date,ttfLocation)
+        TTF = db.getTTFForGivenDateAndLocation(date,locationName)
         
         if TTF != None:
-            return Response(content=TTF, status_code=200)
+            stringResponse = str(TTF.count)
+            print(stringResponse)
+            return Response(content="ok", status_code=200)
  
         TTF = calculateTTF(ttfLocation,date)
 
-   
         #save the TTF in our own database to prevent spaming 3rd party.
         db.saveTTFForGivenDataAndLocation(date,ttfLocation, TTF)
         
