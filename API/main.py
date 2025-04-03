@@ -107,7 +107,7 @@ def calculateTTF(location, date):
     return frc.compute_now(location, date)
 
 def main():
-    run(app, host="0.0.0.0", port=8000)
+    run(app, host="0.0.0.0", port=8080)
 
 
 if __name__ == "__main__":
