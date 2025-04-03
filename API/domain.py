@@ -11,4 +11,4 @@ class Location(BaseModel):
     location_name: str 
     latitude: float 
     longitude: float
-    registrations: list[Registration] = []
+    # registrations: list[Registration] = []

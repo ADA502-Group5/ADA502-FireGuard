@@ -5,29 +5,10 @@ from DataHelper import Location, Registration
 from psycopg2 import  connect
 from dotenv import load_dotenv
 
-
 class StoreRegistrations(BaseModel):
     registrations : list[Registration]
 
-class AbstractRegistrationRepository:
-    
-    @abstractmethod
-    def create_registration(self, contect_details: str, location: str) -> Registration:
-        pass
-
-    @abstractmethod
-    def read_registrations(self) -> list[Registration]:
-        pass
-
-    @abstractmethod
-    def update_registration(self, reg: Registration):
-        pass
-
-    @abstractmethod
-    def delete_registration(self, reg: Registration):
-        pass
-
-class PgRegistrationRepository(AbstractRegistrationRepository):
+class PgRegistrationRepository():
 
     load_dotenv()
     def __init__(self) -> None:
@@ -38,49 +19,82 @@ class PgRegistrationRepository(AbstractRegistrationRepository):
         self.connection = connect(f"postgresql://{db_user}:{db_pass}@{db_host}:5432/{db_name}")
         super().__init__()
 
-    # def read_registrations(self) -> list[Registration]:
-    #     cursor = self.connection.cursor()
-    #     cursor.execute("SELECT id, contact_details, location_name FROM registrations")
-    #     result = []
-    #     for row in cursor.fetchall():
-    #         result.append(Registration(id=row[0], contact_details=row[1], location_name=row[2]))
-    #     cursor.close()
-    #     return result
-    
-    def getLocation(self, locationName)-> Location:
+    def getLocation(self, name)-> Location:
         try:
             cursor = self.connection.cursor()
-            query = f"SELECT * FROM public.locations WHERE name = '{locationName}'"
+            query = "SELECT * FROM public.locations WHERE name = %s;"
         
-            cursor.execute(query)
+            cursor.execute(query,(name,))
             result = cursor.fetchall()
             print(result)
             
             cursor.close()
             return result
         except:
-          connect.rollback()
+          self.connection.rollback()
+
+        finally:
+            if cursor:
+                cursor.close()
+
+    def createLocation(self, locationName, latitude, longitude):
+      
+        cursor = self.connection.cursor()
+          
+        query = """INSERT INTO locations (name, latiude, longitude) 
+                VALUES (%s, %s, %s);"""
+      
+        cursor.execute(query, (locationName, latitude, longitude))
+        self.connection.commit()
+        cursor.close()
+ 
+
+    #TODO add delete and update location?
+
+    #TODO get weather data and save/update it to TTF if existing else create?
 
     def getTTFForGivenDateAndLocation(self, date, location) ->list[float]:
-        cursor = self.connection.cursor()
-        query = "SELECT * FROM weatherdata WHERE date = %s AND location = %s"
+        #TODO Test this
+        try:
+            cursor = self.connection.cursor()
+            query = "SELECT * FROM public.weatherdata WHERE date = %s AND location = %s"
+        
+            cursor.execute(query, (date, location))
+            result = []
+            for row in cursor.fetchall():
+                result.append(row[0])
+            cursor.close()
+            return result
+        except:
+           self.connection.rollback()
+        finally:
+            if cursor:
+                cursor.close()
     
-        cursor.execute(query, (date, location))  # Pass parameters as a tuple
-        result = []
-        for row in cursor.fetchall():
-            result.append(row[0])
-        cursor.close()
-        return result
-    
-    def saveTTFForGivenDataAndLocation(self,date,location):
-        query = "INSERT INTO users (name, age) VALUES (%s, %s) RETURNING id;"
-        cursor.execute(query, (name, age))
-        user_id = cursor.fetchone()[0]  # Get the inserted record ID
-        conn.commit()  # Save changes
+    def saveTTFForGivenDataAndLocation(self, date, location, ttf):
+        try:
+            cursor = self.connection.cursor()
+            
+            # Modified query to RETURNING the id of the inserted row
+            query = """
+            INSERT INTO public.weatherdata(location_name, time_to_flashover, timestamp)
+            VALUES (%s, %s, %s) RETURNING id;
+            """
+            
+            # Execute query and get the returned id
+            cursor.execute(query, (location, ttf, date))
+            
+            # Fetch the id of the inserted row
+            inserted_id = cursor.fetchone()[0]
+            
+            # Commit the transaction
+            self.connection.commit()
+            
+            return inserted_id
 
-    #TODO, make the other CRUD operations
+        except Exception as e:
+            self.connection.rollback()
 
-
-
-
-
+        finally:
+            if cursor:
+                cursor.close()
