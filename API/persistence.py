@@ -1,12 +1,9 @@
 from abc import abstractmethod
 import os
-from pydantic import BaseModel
-from DataHelper import Location, Registration
 from psycopg2 import  connect
 from dotenv import load_dotenv
 
-class StoreRegistrations(BaseModel):
-    registrations : list[Registration]
+
 
 class PgRegistrationRepository():
 
@@ -19,7 +16,7 @@ class PgRegistrationRepository():
         self.connection = connect(f"postgresql://{db_user}:{db_pass}@{db_host}:5432/{db_name}")
         super().__init__()
 
-    def getLocation(self, name)-> Location:
+    def getLocation(self, name):
        
             cursor = self.connection.cursor()
             query = "SELECT * FROM public.locations WHERE name = %s;"
