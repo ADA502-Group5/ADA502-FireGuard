@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  
+  db:
+    image: postgres:15
+    container_name: fireguard_db
+    restart: always
+    environment:
+      POSTGRES_USER: fireguard_user
+      POSTGRES_PASSWORD: fireguard_pw
+      POSTGRES_DB: fireguard_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - fireguard_db_data:/var/lib/postgresql/data  #DB-data
+      - ./initdb:/docker-entrypoint-initdb.d
+
+  api:
+    build:
+      context: ./API  #Path to API docker
+    container_name: fireguard_api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PG_HOST: db
+      PG_USER: fireguard_user
+      PG_PASS: fireguard_pw
+      PG_NAME: fireguard_db
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./API:/app
+
+volumes:
+  fireguard_db_data:
