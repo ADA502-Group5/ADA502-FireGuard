@@ -2,7 +2,7 @@ from abc import abstractmethod
 import os
 from psycopg2 import  connect
 from dotenv import load_dotenv
-
+from frcm.datamodel.model import Location
 
 
 class PgRegistrationRepository():
@@ -16,15 +16,13 @@ class PgRegistrationRepository():
         self.connection = connect(f"postgresql://{db_user}:{db_pass}@{db_host}:5432/{db_name}")
         super().__init__()
 
-    def getLocation(self, name):
+    def getLocation(self, name) -> Location:
        
             cursor = self.connection.cursor()
             query = "SELECT * FROM public.locations WHERE name = %s;"
         
             cursor.execute(query,(name,))
-            result = cursor.fetchall()
-            print(result)
-            
+            result = cursor.fetchone()
             cursor.close()
             return result
  
@@ -60,7 +58,6 @@ class PgRegistrationRepository():
       
             cursor = self.connection.cursor()
             
-            # Modified query to RETURNING the id of the inserted row
             query = """
             INSERT INTO public.weatherdata(location_name, time_to_flashover, timestamp)
             VALUES (%s, %s, %s) RETURNING id;

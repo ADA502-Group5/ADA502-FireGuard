@@ -2,13 +2,9 @@ from fastapi import FastAPI, Response
 from uvicorn import run
 import datetime as dt
 from datetime import datetime
-import persistence
-
 from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
-
 from persistence import PgRegistrationRepository
-
 
 app = FastAPI()
 db = PgRegistrationRepository()
@@ -18,33 +14,33 @@ def read_root():
     return "alive"
 
 @app.get("/TTF/{locationName}/{date}")
-def calculateTTF(locationName: str, date: str):
-
-    try:              
-        ttfLocation = db.getLocation(locationName)
+def getTTFCalculation(locationName: str, date: str):
+         
+    ttfLocation = db.getLocation(locationName)
       
-        if ttfLocation == []:
-            return Response(content=f"Nothing found. Please try another location or check if spelled correct.", status_code=404)
+    if ttfLocation == []:
+        return Response(content=f"Nothing found. Please try another location or check if spelled correct.", status_code=404)
 
-        date = datetime.strptime(date, "%Y-%m-%d")
+    date = datetime.strptime(date, "%Y-%m-%d-%H-%M-%S")
+       
+    #check if we have stored in our database before fetching from 3rd party
+    TTF = db.getTTFForGivenDateAndLocation(date,locationName)
         
-        #check if we have stored in our database before fetching from 3rd party
-        TTF = db.getTTFForGivenDateAndLocation(date,locationName)
-        
-        if TTF != []:
-            stringResponse = str(TTF)
-            print(stringResponse)
-            return Response(content=stringResponse, status_code=200)
- 
-        TTF = calculateTTF(ttfLocation,date)
-        print(TTF)
-        #save the TTF in our own database to prevent spaming 3rd party.
-        db.saveTTFForGivenDataAndLocation(date,locationName, TTF)
-        
+    if TTF != []:
         stringResponse = str(TTF)
+        print(stringResponse)
         return Response(content=stringResponse, status_code=200)
-    except ValueError:
-        return {"error": "Invalid date format. Use YYYY-MM-DD"}
+
+    locationDTO = Location(latitude=ttfLocation[1], longitude=ttfLocation[2])
+        
+    TTF = calculateTTF(locationDTO,date)
+    print(TTF)
+    #save the TTF in our own database to prevent spaming 3rd party.
+    db.saveTTFForGivenDataAndLocation(date,locationName, TTF)
+        
+    stringResponse = str(TTF)
+    return Response(content=stringResponse, status_code=200)
+
 
 @app.get("/locations/{location}")
 def get_location(location: str):
@@ -82,15 +78,21 @@ def create_location(locationName:str, location:Location):
 
 #TODO add crud for users
 
-def calculateTTF(location, date):
+def calculateTTF(location:Location, date):
     
+    
+    print(location.latitude)
     #Guard this with a static response
-    return 5.55
-    
-    frc = METFireRiskAPI(date, location)
-    #obs_delta = datetime.timedelta(days=2)
+    #return 5.55
+    frc = METFireRiskAPI()
 
-    return frc.compute_now(location, date)
+    obs_delta = dt.timedelta(days=2)  
+    result = frc.compute_now(location,obs_delta)
+
+    print(result.firerisks)
+    print(result.location)
+
+    return result.firerisks
 
 def main():
     run(app, host="0.0.0.0", port=8000)
