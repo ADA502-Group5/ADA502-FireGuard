@@ -10,11 +10,10 @@ package-mode = false
 python = "^3.12"
 fastapi = {extras = ["standard"], version = "^0.115.8"}
 minio = "^7.2.15"
-psycopg2-binary = "^2.9.10"
-dynamic-frcm = "^1.0.1"
-python-dotenv = "^1.1.0"
 pydantic = "^2.11.2"
-
+psycopg2 = "^2.9.10"
+dotenv = "^0.9.9"
+dynamic-frcm = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -30,8 +30,6 @@ services:
       PG_NAME: fireguard_db
     ports:
       - "8080:8080"
-    volumes:
-      - ./API:/app
 
 volumes:
   fireguard_db_data:
