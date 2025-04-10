@@ -15,6 +15,7 @@ The Fireguard project is a group assignment for the ADA502 - Cloud Computing cou
 
 Docker:
 ```docker --version```
+
 WSL:
 ```wsl --install```
 
