@@ -3,6 +3,7 @@ import os
 from psycopg2 import  connect
 from dotenv import load_dotenv
 from frcm.datamodel.model import Location
+from DataHelper import User
 
 
 class PgRegistrationRepository():
@@ -62,8 +63,7 @@ class PgRegistrationRepository():
             INSERT INTO public.weatherdata(location_name, time_to_flashover, timestamp)
             VALUES (%s, %s, %s) RETURNING id;
             """
-            print(location)
-            # Execute query and get the returned id
+           # Execute query and get the returned id
             cursor.execute(query, (location, ttf, date))
             
             # Fetch the id of the inserted row
@@ -73,5 +73,26 @@ class PgRegistrationRepository():
             self.connection.commit()
             
             return inserted_id
+    
+    def saveUser(self, user:User):
+        cursor = self.connection.cursor()
+        query = """
+                insert into public.subscribers (email, username, password_hash, location_name)
+                VALUES (%s,%s,%s)
+                """
+        cursor.execute(query,(user.user_email, user.user_name, '1234', user.user_location))
+        inseted_id = cursor.fetchone()[0]
+        self.connection.commit()
+        return inseted_id
+    
+    def getUser(self, user_email:str):
 
-
+        cursor = self.connection.cursor()
+        query = """
+                select * from public.subscribers where email = %s"""
+        
+        cursor.execute(query, (user_email,))
+            
+        result = cursor.fetchone() 
+        cursor.close()
+        return result

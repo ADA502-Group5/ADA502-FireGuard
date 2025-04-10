@@ -11,3 +11,12 @@ class Location(BaseModel):
     latitude: float
     longitude: float
     registrations: Optional[List[Registration]] = []
+
+class UserLocation(BaseModel):
+    city: str
+    country: str
+
+class User(BaseModel):
+    user_name: str
+    user_email: str
+    user_location: UserLocation
