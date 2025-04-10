@@ -9,7 +9,8 @@ CREATE TABLE subscribers (
 	id SERIAL PRIMARY KEY,
 	username varchar(100) UNIQUE NOT NULL,
 	password_hash varchar(255) NOT NULL,
-	email varchar(255) UNIQUE NOT NULL
+	email varchar(255) UNIQUE NOT NULL,
+	CONSTRAINT subscribers_location_fk FOREIGN KEY (location_name) REFERENCES locations(name)
 );
 -- Table: Weatherdata
 CREATE TABLE weatherdata (

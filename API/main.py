@@ -5,6 +5,7 @@ from datetime import datetime
 from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
 from persistence import PgRegistrationRepository
+from DataHelper import User
 
 app = FastAPI()
 db = PgRegistrationRepository()
@@ -77,6 +78,45 @@ def create_location(locationName:str, location:Location):
 # #                 p.delete_registration(r)
 
 #TODO add crud for users
+
+@app.get("/user/{user_email}")
+def getUser(user_email:str):
+    
+    if "@" not in user_email:
+        return Response(content="Email is not valid.", status_code = 404)
+    
+    user = db.getUser(user_email)
+
+    if user is None:
+        return Response (content= "User not found", status_code=200)
+
+    return Response(content=user, status_code = 200)
+
+
+@app.post("/user/")
+def postUser(user:User):
+    
+    if "@" not in user.user_email:
+        return Reponse(content="Email is not valid. User was not saved.", status_code =404)
+    if len(user.user_email) > 50:
+        return Response(content="Email is too long", status_code=404)
+    if len(user.user_name) > 50:
+        return Response(content="Username is too long", status_code=404)
+    
+    locationFromDb = db.getLocation(user.user_location.city)
+
+    if locationFromDb == []:
+        return Response (content="Location does not exist. Please try again", status_code=404)
+    
+    userExists = db.getUser(user.user_email)
+
+    if userExists != None:
+        return Response (content="User already exisits", status_code=404)
+   
+    db.saveUser(user)
+
+    return Response(content="User created successfully", status_code =200)
+
 
 def calculateTTF(location:Location, date):
     
