@@ -7,6 +7,7 @@ The Fireguard project is a group assignment for the ADA502 - Cloud Computing cou
 - **Pydantic**: Library used for validating data.
 - **Docker**: Used for containerizing the application.
 - **Docker-compose**: Used to manage multiple Docker containers (Two containers; API and database).
+- **Postman**: USed for testing API endpoints and sending HTTP requests (GET, POST, PUT, DELETE)
 
 # Setup
 ## Pre-requisites
@@ -28,5 +29,19 @@ WSL:
 or
 
 ```pip install -r requirements.txt```
+requirements.txt contains the dependencies/ libraries that are required for the project to run. It lists all packages and versions that the project depends on. 
 
+## Running the Application
+**Run with docker compose**: To start the application using Docker Compose, the Docker Desktop needs to be open and then simply run:
 
+   ```docker-compose up --build```
+
+This will build the Docker containers and start PostgreSQL and API services in the docker environments. The API will be accessible at ```http://localhost:8080``` (port: 8080) which can be opened in any browser. The docker containers can now be ran directly from docker desktop in the future, however if you reconfigure the docker files, the docker containers need to be rebuilt.
+
+# API Endpoints
+- **GET/checkhealth**: Checks if the API is alive. Easy to check whether the application runs correctly or not.
+- **GET/locations/{location}**: Fetches all registrations for a specified location.
+- **POST/locations/{location}**: Creates new registration for a specified location.
+- **POST/locations/{location}**: Deletes old registration for a specified location.
+
+This part is not complete yet...
