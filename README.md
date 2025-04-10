@@ -20,12 +20,4 @@ WSL:
 ```wsl -l -v```
 
 ## Installing Dependencies
-1. **Clone the project repository**: The project is obviously required on your computer in order to run it locally. Now open cmd and navigate to your desired directory for this project using
-
-```cd <dir>```
-
-, followed by 
-
-```git clone https://github.com/ADA502-Group5/ADA502-FireGuard.git```
-
-Congratz now you have access to the fireguard project.
+1. **Clone the project repository**: The project is obviously required on your computer in order to run it locally. Now open cmd and navigate to your desired directory for this project using ```cd <dir>```, followed by ```git clone https://github.com/ADA502-Group5/ADA502-FireGuard.git```. Congratz now you have access to the fireguard project.
