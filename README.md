@@ -14,8 +14,8 @@ The Fireguard project is a group assignment for the ADA502 - Cloud Computing cou
 - **Docker/ Docker Desktop**: Docker desktop is only necessary on windows or ios systems to host and run docker containers as Docker relies on linux kernel features. URL: https://www.docker.com/products/docker-desktop/. Follow the instructions to download docker desktop. When installing Docker Desktop, both Docker and WSL are installed which is essensial to run docker containers. To verify Docker and WSL installations, we use the following commands in cmd:
 
 Docker:
-    ```docker --version```
+```docker --version```
 WSL:
-    ```wsl --install```
+```wsl --install```
 
 s
