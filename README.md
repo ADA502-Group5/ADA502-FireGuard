@@ -42,6 +42,6 @@ This will build the Docker containers and start PostgreSQL and API services in t
 - **GET/checkhealth**: Checks if the API is alive. Easy to check whether the application runs correctly or not.
 - **GET/locations/{location}**: Fetches all registrations for a specified location.
 - **POST/locations/{location}**: Creates new registration for a specified location.
-- **POST/locations/{location}**: Deletes old registration for a specified location.
+- **DELETE/locations/{location}**: Deletes old registration for a specified location.
 
 This part is not complete yet...
