@@ -17,6 +17,6 @@ Docker:
 ```docker --version```
 
 WSL:
-```wsl --install```
+```wsl -l -v```
 
 s
