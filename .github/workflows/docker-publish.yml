@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the API image via docker-compose
-        run: docker compose -f docker-compose.yml build api
+        run: docker compose -f ./docker-compose.yml build api
 
       - name: Tag the built image
         run: |
