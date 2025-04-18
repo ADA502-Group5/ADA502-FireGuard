@@ -19,6 +19,7 @@ services:
   api:
     build:
       context: ./API  #Path to API docker
+    image: fireguard-api
     container_name: fireguard_api
     restart: always
     depends_on:
