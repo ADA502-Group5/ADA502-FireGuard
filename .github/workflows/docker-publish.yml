@@ -23,7 +23,7 @@ jobs:
 
       - name: Tag the built image
         run: |
-          docker tag fireguard_api ${{ secrets.DOCKER_USERNAME }}/ada502-fireguard-api:latest
+          docker tag ada502-fireguard-api ${{ secrets.DOCKER_USERNAME }}/ada502-fireguard-api:latest
 
       - name: Push to Docker Hub
         run: |
