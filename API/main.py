@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from uvicorn import run
 import datetime as dt
 from datetime import datetime
@@ -6,9 +6,14 @@ from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
 from persistence import PgRegistrationRepository
 from DataHelper import User
+from mqtt_client import connect_mqtt, publish_message
 
 app = FastAPI()
 db = PgRegistrationRepository()
+
+@app.on_event("startup")
+async def startup_event():
+    connect_mqtt()
 
 @app.get("/checkhealth")
 def read_root():
@@ -97,7 +102,7 @@ def getUser(user_email:str):
 def postUser(user:User):
     
     if "@" not in user.user_email:
-        return Reponse(content="Email is not valid. User was not saved.", status_code =404)
+        return Response(content="Email is not valid. User was not saved.", status_code =404)
     if len(user.user_email) > 50:
         return Response(content="Email is too long", status_code=404)
     if len(user.user_name) > 50:
@@ -133,6 +138,27 @@ def calculateTTF(location:Location, date):
     print(result.location)
 
     return result.firerisks
+
+@app.get("/trigger-alert")
+def trigger_alert():
+    publish_message("Fire alert sent from /trigger-alert endpoint. Det fungerer 🔥")
+    return {"status": "MQTT message published"}
+
+@app.post("/subscribe")
+async def subscribe(request: Request):
+    body = await request.json()
+    username = body.get("username")
+    email = body.get("email")
+    location_name = body.get("location")
+    if not all([username, email, location_name]):
+        return Response(content="Missing fields", status_code=400)
+    db.subscribe_user(username, email, "1234", location_name)
+    return {"status": f"{username} subscribed to {location_name}"}
+
+@app.delete("/unsubscribe/{username}")
+def unsubscribe(username: str):
+    db.unsubscribe_user(username)
+    return {"status": f"{username} unsubscribed"}
 
 def main():
     run(app, host="0.0.0.0", port=8080)

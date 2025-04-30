@@ -1,14 +1,17 @@
 FROM python:3.12
 
-# Copy entire codebase into the container
+# Set working directory
+WORKDIR /app
+
+# Copy all files into the container's /app directory
 COPY . .
 
-# Install pip dependencies and dependencies from requirements.txt
+# Install pip dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Expose port
+# Expose FastAPI port
 EXPOSE 8080
 
-# Run the app
+# Run the FastAPI app
 CMD ["python", "main.py"]

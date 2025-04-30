@@ -4,14 +4,17 @@ CREATE TABLE locations (
 	latitude numeric(9,6) NOT NULL,
 	longitude numeric(9,6) NOT NULL
 );
+
 -- Table: Subscribers
 CREATE TABLE subscribers (
 	id SERIAL PRIMARY KEY,
 	username varchar(100) UNIQUE NOT NULL,
 	password_hash varchar(255) NOT NULL,
 	email varchar(255) UNIQUE NOT NULL,
+	location_name varchar(255) NOT NULL,
 	CONSTRAINT subscribers_location_fk FOREIGN KEY (location_name) REFERENCES locations(name)
 );
+
 -- Table: Weatherdata
 CREATE TABLE weatherdata (
 	id SERIAL PRIMARY KEY,
@@ -23,5 +26,3 @@ CREATE TABLE weatherdata (
 	timestamp timestamp NOT NULL,
 	CONSTRAINT weatherdata_location_fk FOREIGN KEY (location_name) REFERENCES locations(name)
 );
-
-
