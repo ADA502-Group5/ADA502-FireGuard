@@ -14,7 +14,7 @@ pydantic = "^2.11.2"
 psycopg2 = "^2.9.10"
 dotenv = "^0.9.9"
 dynamic-frcm = "^1.0.1"
-python-keycloak = "^5.5.0"
+python-keycloak = "3.9.0"
 
 [build-system]
 requires = ["poetry-core"]

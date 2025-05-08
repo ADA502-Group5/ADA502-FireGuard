@@ -8,7 +8,7 @@ from persistence import PgRegistrationRepository
 from DataHelper import User
 
 
-from kc.auth import verify_admin_role
+from kc.auth import verify_admin_role,verify_sadmin_role
 
 app = FastAPI()
 db = PgRegistrationRepository()
@@ -47,7 +47,7 @@ def getTTFCalculation(locationName: str, date: str):
 
 
 @app.get("/locations/{location}")
-def get_location(location: str, user: bool=Depends())):
+def get_location(location: str, user: bool=Depends(verify_admin_role)):
 
     locationFromDb = db.getLocation(location)
     print(locationFromDb)

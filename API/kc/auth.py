@@ -12,9 +12,10 @@ keycloak_openid = KeycloakOpenID(
 
 # Get Token from HTTP Request object of the restapi endpoint
 def get_jwttoken(req: Request):
+    
     token = req.headers["Authorization"]
     token = token.split(" ").pop(1)
-    print(token)
+    # print(token)
     return token
 
 
@@ -68,6 +69,7 @@ async def get_user_info(payload: dict = Depends(get_payload)) -> User:
 
 
 def verify_admin_role(user: User = Depends(get_user_info)) -> bool:
+
     roles: list = user.realm_roles
     roles.extend(user.client_roles)
     print(roles)
@@ -94,6 +96,7 @@ def verify_suser_role(user: User = Depends(get_user_info)) -> bool:
 
 
 def verify_role(roles: list, role: str) -> bool:
+ 
     try:
         roles.index(role)
         return True
