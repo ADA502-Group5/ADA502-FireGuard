@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Depends
 from uvicorn import run
 import datetime as dt
 from datetime import datetime
@@ -6,6 +6,9 @@ from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
 from persistence import PgRegistrationRepository
 from DataHelper import User
+
+
+from kc.auth import verify_admin_role
 
 app = FastAPI()
 db = PgRegistrationRepository()
@@ -44,7 +47,7 @@ def getTTFCalculation(locationName: str, date: str):
 
 
 @app.get("/locations/{location}")
-def get_location(location: str):
+def get_location(location: str, user: bool=Depends())):
 
     locationFromDb = db.getLocation(location)
     print(locationFromDb)
@@ -135,7 +138,7 @@ def calculateTTF(location:Location, date):
     return result.firerisks
 
 def main():
-    run(app, host="0.0.0.0", port=8080)
+    run(app, host="0.0.0.0", port=9000)
 
 
 if __name__ == "__main__":
